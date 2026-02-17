@@ -477,7 +477,7 @@
     </div>
     
     <!-- BOTÓN DE CIERRE DE SESIÓN FLOTANTE -->
-    <button id="logout-btn" onclick="cerrarSesionLocal()">
+    <button id="logout-btn" onclick="cerrarSesionDefinitiva()">
         <svg viewBox="0 0 24 24">
             <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h8v-2H4V5z"/>
         </svg>
@@ -552,35 +552,49 @@
             iframe.src = iframe.src; // Recarga el iframe
         }
         
-        // FUNCIÓN DE CIERRE DE SESIÓN - SOLO DESDE GITHUB PAGES
-        function cerrarSesionLocal() {
+        // FUNCIÓN DE CIERRE DE SESIÓN - AHORA SÍ FUNCIONA
+        function cerrarSesionDefinitiva() {
             if (!confirm('¿Estás seguro de que quieres cerrar la sesión?')) return;
             
             // Mostrar loading
             document.getElementById('loading').style.display = 'flex';
             document.getElementById('loading').style.opacity = '1';
             
-            // Limpiar TODO el almacenamiento local
-            localStorage.clear();
-            sessionStorage.clear();
+            // 1. PRIMERO: Matar la sesión del iframe cargando una URL de logout
+            const iframe = document.getElementById('oikos-frame');
             
-            // Limpiar cookies
-            document.cookie.split(";").forEach(function(c) { 
-                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
-            });
+            // Intentar diferentes URLs de logout
+            const logoutUrls = [
+                'https://script.google.com/macros/s/AKfycby46lqCa0gYTd2qCouLBPwdu84dg9a91HPPmVe6g6VX-LbsuI7kHcZFWCUu-p6hC_1D/exec?logout=true',
+                'https://script.google.com/macros/s/AKfycby46lqCa0gYTd2qCouLBPwdu84dg9a91HPPmVe6g6VX-LbsuI7kHcZFWCUu-p6hC_1D/exec?action=logout',
+                'about:blank' // Último recurso: cargar página en blanco
+            ];
             
-            // Opcional: Intentar enviar mensaje al iframe para que también cierre allí
-            try {
-                const iframe = document.getElementById('oikos-frame');
-                iframe.contentWindow.postMessage('cerrar-sesion', '*');
-            } catch(e) {
-                console.log('No se pudo notificar al iframe');
+            let logoutIndex = 0;
+            
+            function intentarLogout() {
+                if (logoutIndex < logoutUrls.length) {
+                    iframe.src = logoutUrls[logoutIndex];
+                    logoutIndex++;
+                    setTimeout(intentarLogout, 500);
+                } else {
+                    // 2. LIMPIAR TODO el almacenamiento local
+                    localStorage.clear();
+                    sessionStorage.clear();
+                    
+                    // 3. Limpiar cookies
+                    document.cookie.split(";").forEach(function(c) { 
+                        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+                    });
+                    
+                    // 4. RECARGAR la página COMPLETAMENTE (sin caché)
+                    setTimeout(() => {
+                        window.location.href = window.location.href + '?t=' + new Date().getTime();
+                    }, 1000);
+                }
             }
             
-            // Recargar la página después de 1 segundo
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
+            intentarLogout();
         }
         
         // Timeout de seguridad: si después de 15 segundos no carga, mostrar error
@@ -590,10 +604,10 @@
             }
         }, 15000);
         
-        // Escuchar mensajes del iframe (por si el script intenta cerrar sesión)
+        // Escuchar mensajes del iframe
         window.addEventListener('message', function(event) {
-            if (event.data === 'cerrar-sesion' || event.data === 'logout') {
-                cerrarSesionLocal();
+            if (event.data === 'cerrar-sesion' || event.data === 'logout' || event.data === 'sesion-finalizada') {
+                cerrarSesionDefinitiva();
             }
         });
     </script>
