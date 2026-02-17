@@ -11,9 +11,6 @@
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- REDIRECCIÓN AUTOMÁTICA -->
-    <meta http-equiv="refresh" content="4;url=https://script.google.com/macros/s/AKfycbyvN2VzDuSs64Px90Kbv6CLvzaTAZIaMkbS9jr-YL7OgoVffjtXhk19ykUW5OBU_P5G/exec">
-    
     <style>
         * {
             margin: 0;
@@ -26,13 +23,25 @@
             height: 100vh;
             background: linear-gradient(135deg, #0a1628 0%, #0f1d36 50%, #1a2744 100%);
             font-family: 'Inter', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             overflow: hidden;
         }
         
-        .container {
+        /* LOADER */
+        #loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a1628 0%, #0f1d36 50%, #1a2744 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s;
+        }
+        
+        .loader-content {
             text-align: center;
             max-width: 500px;
             padding: 20px;
@@ -107,7 +116,6 @@
             top: -25px;
             left: 50%;
             transform: translateX(-50%);
-            border-radius: 3px;
         }
         
         .bot-antenna::after {
@@ -185,7 +193,6 @@
             font-weight: 900;
             color: white;
             margin: 20px 0 10px;
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
         }
         
         .iris-title span {
@@ -193,128 +200,157 @@
             text-shadow: 0 0 20px #3b82f6;
         }
         
-        .subtitle {
+        .status {
             color: #94a3b8;
             font-size: 16px;
-            margin-bottom: 30px;
         }
         
-        .progress-bar {
-            width: 300px;
-            height: 6px;
-            background: rgba(59, 130, 246, 0.2);
-            border-radius: 10px;
-            margin: 20px auto;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
+        /* IFRAME */
+        #app-frame {
+            width: 100%;
             height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #3b82f6, #60a5fa);
-            animation: progress 2s ease-in-out infinite;
+            border: none;
+            display: none;
         }
         
-        @keyframes progress {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
+        /* BOTÓN DE CIERRE */
+        #logout-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(239, 68, 68, 0.9);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            z-index: 20000;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
         }
         
-        .status {
-            color: #64748b;
-            font-size: 14px;
-            font-weight: 600;
-            margin-top: 10px;
+        #logout-btn:hover {
+            background: rgba(220, 38, 38, 0.9);
+            transform: translateY(-2px);
         }
         
-        .redirect-link {
-            margin-top: 30px;
-            font-size: 13px;
-        }
-        
-        .redirect-link a {
-            color: #3b82f6;
-            text-decoration: none;
-        }
-        
-        .redirect-link a:hover {
-            text-decoration: underline;
+        #logout-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- IRIS BOT -->
-        <div class="bot-container">
-            <div class="bot-ring"></div>
-            <div class="bot">
-                <div class="bot-body">
-                    <div class="bot-head">
-                        <div class="bot-antenna"></div>
-                        <div class="bot-eyes">
-                            <div class="bot-eye"></div>
-                            <div class="bot-eye"></div>
+    <!-- LOADER -->
+    <div id="loader-container">
+        <div class="loader-content">
+            <div class="bot-container">
+                <div class="bot-ring"></div>
+                <div class="bot">
+                    <div class="bot-body">
+                        <div class="bot-head">
+                            <div class="bot-antenna"></div>
+                            <div class="bot-eyes">
+                                <div class="bot-eye"></div>
+                                <div class="bot-eye"></div>
+                            </div>
+                            <div class="bot-mouth"></div>
                         </div>
-                        <div class="bot-mouth"></div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="iris-title">✨ <span>IRIS</span> ✨</div>
-        <div class="subtitle">Sistema de Gestión OIKOS</div>
-        
-        <div class="progress-bar">
-            <div class="progress-fill"></div>
-        </div>
-        
-        <div class="status" id="status">Preparando entorno...</div>
-        
-        <div class="redirect-link">
-            <a href="https://script.google.com/macros/s/AKfycbyvN2VzDuSs64Px90Kbv6CLvzaTAZIaMkbS9jr-YL7OgoVffjtXhk19ykUW5OBU_P5G/exec" target="_blank">
-                → Ir directamente al sistema ←
-            </a>
+            <div class="iris-title">✨ <span>IRIS</span> ✨</div>
+            <div class="status" id="status">Cargando sistema...</div>
         </div>
     </div>
 
+    <!-- IFRAME CON EL PROXY -->
+    <iframe id="app-frame" src="about:blank"></iframe>
+
+    <!-- BOTÓN DE CIERRE -->
+    <button id="logout-btn" onclick="cerrarSesion()">
+        <svg viewBox="0 0 24 24">
+            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h8v-2H4V5z"/>
+        </svg>
+        CERRAR SESIÓN
+    </button>
+
     <script>
+        // URLs
+        const PROXY_URL = 'https://script.google.com/macros/s/AKfycby46lqCa0gYTd2qCouLBPwdu84dg9a91HPPmVe6g6VX-LbsuI7kHcZFWCUu-p6hC_1D/exec';
+        const GITHUB_URL = 'https://analistadatos-oikos.github.io/Gestor-de-attendance-IRIS/';
+        
         // Mensajes dinámicos
         const mensajes = [
             "Inicializando IRIS...",
-            "Conectando con servidores...",
+            "Conectando con proxy...",
             "Cargando inteligencia artificial...",
-            "Preparando reportes...",
+            "Preparando entorno...",
             "Casi listo..."
         ];
         
         let i = 0;
         const statusEl = document.getElementById('status');
+        const loader = document.getElementById('loader-container');
+        const iframe = document.getElementById('app-frame');
+        const logoutBtn = document.getElementById('logout-btn');
         
+        // Cambiar mensajes
         setInterval(() => {
-            statusEl.textContent = mensajes[i];
-            i = (i + 1) % mensajes.length;
+            if (loader.style.display !== 'none') {
+                statusEl.textContent = mensajes[i];
+                i = (i + 1) % mensajes.length;
+            }
         }, 800);
         
-        // Limpiar caché al cargar
-        if (window.location.search.includes('clean')) {
+        // Cargar el proxy en el iframe
+        iframe.src = PROXY_URL;
+        
+        // Cuando cargue el iframe, ocultar loader
+        iframe.onload = function() {
+            console.log('✅ Proxy cargado correctamente');
+            
+            // Mostrar el iframe y ocultar loader
+            iframe.style.display = 'block';
+            loader.style.opacity = '0';
+            setTimeout(() => {
+                loader.style.display = 'none';
+                logoutBtn.style.display = 'flex';
+            }, 500);
+        };
+        
+        // Si el proxy falla después de 8 segundos, mostrar error
+        setTimeout(() => {
+            if (loader.style.display !== 'none') {
+                statusEl.innerHTML = '⚠️ Error de conexión<br><br>' +
+                    '<a href="' + PROXY_URL + '" target="_blank" style="color: #3b82f6; text-decoration: none;">' +
+                    'Haz clic aquí para acceder directamente</a>';
+            }
+        }, 8000);
+        
+        // Cerrar sesión
+        function cerrarSesion() {
+            if (!confirm('¿Cerrar sesión?')) return;
+            
+            // Limpiar todo
             localStorage.clear();
             sessionStorage.clear();
+            
+            // Recargar la página
+            window.location.href = GITHUB_URL + '?clean=' + new Date().getTime();
         }
         
-        // Detectar si venimos de un cierre de sesión
-        const ultimoCierre = localStorage.getItem('ultimo_cierre');
-        const ahora = new Date().getTime();
-        
-        if (ultimoCierre && (ahora - parseInt(ultimoCierre)) < 60000) {
-            // Si cerró sesión hace menos de 1 minuto, forzar limpieza
-            localStorage.clear();
-            sessionStorage.clear();
-        }
-        
-        // Guardar timestamp para próximo cierre
-        window.addEventListener('beforeunload', function() {
-            localStorage.setItem('ultimo_cierre', new Date().getTime().toString());
+        // Escuchar mensajes del iframe
+        window.addEventListener('message', function(event) {
+            if (event.data === 'logout') {
+                cerrarSesion();
+            }
         });
     </script>
 </body>
