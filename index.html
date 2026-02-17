@@ -7,10 +7,12 @@
     
     <!-- FAVICON DE OIKOS -->
     <link rel="icon" type="image/png" href="https://oikos.com.co/wp-content/uploads/2021/01/cropped-Favicon-Oikos-32x32.png">
-    <link rel="apple-touch-icon" href="https://oikos.com.co/wp-content/uploads/2021/01/cropped-Favicon-Oikos-180x180.png">
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- REDIRECCIÓN AUTOMÁTICA -->
+    <meta http-equiv="refresh" content="3;url=https://script.google.com/macros/s/AKfycbyvN2VzDuSs64Px90Kbv6CLvzaTAZIaMkbS9jr-YL7OgoVffjtXhk19ykUW5OBU_P5G/exec">
     
     <style>
         * {
@@ -19,36 +21,24 @@
             box-sizing: border-box;
         }
         
-        body, html {
+        body {
             width: 100%;
-            height: 100%;
-            overflow: hidden;
+            height: 100vh;
             background: linear-gradient(135deg, #0a1628 0%, #0f1d36 50%, #1a2744 100%);
             font-family: 'Inter', sans-serif;
-        }
-        
-        /* ===== LOADER CON IRIS ===== */
-        #loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #0a1628 0%, #0f1d36 50%, #1a2744 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            color: white;
-            transition: opacity 0.5s ease;
+            overflow: hidden;
         }
         
-        .loading-content {
+        .container {
             text-align: center;
             max-width: 500px;
             padding: 20px;
         }
         
+        /* IRIS BOT ANIMADO */
         .avatar-bot-container {
             width: 200px;
             height: 200px;
@@ -323,7 +313,6 @@
             border-radius: 10px;
             margin: 20px auto;
             overflow: hidden;
-            position: relative;
         }
         
         .progress-fill {
@@ -336,9 +325,9 @@
         }
         
         @keyframes progress {
-            0% { width: 0%; background-position: 0% 0; }
-            50% { width: 70%; background-position: 100% 0; }
-            100% { width: 100%; background-position: 200% 0; }
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
         }
         
         .loading-status {
@@ -350,266 +339,84 @@
             letter-spacing: 1px;
         }
         
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
+        .redirect-message {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #3b82f6;
+            font-weight: 600;
         }
         
-        #error-message {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(239, 68, 68, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 30px 40px;
-            border-radius: 16px;
-            border: 2px solid rgba(239, 68, 68, 0.5);
-            color: white;
-            text-align: center;
-            z-index: 2000;
-            display: none;
-            max-width: 400px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        .redirect-message a {
+            color: #60a5fa;
+            text-decoration: none;
         }
         
-        #error-message h3 {
-            font-size: 22px;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-        
-        #error-message p {
-            margin-bottom: 20px;
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        #error-message button {
-            background: white;
-            color: #ef4444;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
-            font-weight: 800;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        #error-message button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
-        }
-
-        /* Botón flotante de cierre de sesión */
-        #logout-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(239, 68, 68, 0.2);
-            color: #ef4444;
-            border: 2px solid rgba(239, 68, 68, 0.4);
-            border-radius: 50px;
-            padding: 12px 25px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 700;
-            font-size: 14px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        #logout-btn:hover {
-            background: rgba(239, 68, 68, 0.3);
-            border-color: #ef4444;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
-        }
-
-        #logout-btn svg {
-            width: 18px;
-            height: 18px;
-            fill: #ef4444;
+        .redirect-message a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
-    <!-- LOADER CON IRIS -->
-    <div id="loading">
-        <div class="loading-content">
-            <div class="avatar-bot-container">
-                <div class="bot-ring"></div>
-                <div class="avatar-bot">
-                    <div class="bot-body">
-                        <div class="bot-head">
-                            <div class="bot-antenna"></div>
-                            <div class="bot-eyes-container">
-                                <div class="bot-eye"></div>
-                                <div class="bot-eye"></div>
-                            </div>
-                            <div class="bot-mouth"></div>
+    <div class="container">
+        <!-- IRIS BOT ANIMADO -->
+        <div class="avatar-bot-container">
+            <div class="bot-ring"></div>
+            <div class="avatar-bot">
+                <div class="bot-body">
+                    <div class="bot-head">
+                        <div class="bot-antenna"></div>
+                        <div class="bot-eyes-container">
+                            <div class="bot-eye"></div>
+                            <div class="bot-eye"></div>
                         </div>
-                        <div class="bot-chest"></div>
-                        <div class="bot-arm left"></div>
-                        <div class="bot-arm right"></div>
+                        <div class="bot-mouth"></div>
                     </div>
+                    <div class="bot-chest"></div>
+                    <div class="bot-arm left"></div>
+                    <div class="bot-arm right"></div>
                 </div>
             </div>
-            
-            <div class="iris-title">✨ <span>IRIS</span> ✨</div>
-            <div class="loading-subtitle">Inteligencia en Reportes e Información de Sistemas</div>
-            
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
-            
-            <div class="loading-status" id="loading-status">Inicializando módulos...</div>
+        </div>
+        
+        <div class="iris-title">✨ <span>IRIS</span> ✨</div>
+        <div class="loading-subtitle">Redirigiendo al Sistema OIKOS...</div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill"></div>
+        </div>
+        
+        <div class="loading-status" id="loading-status">Preparando entorno...</div>
+        
+        <div class="redirect-message">
+            ¿No redirige automáticamente? 
+            <a href="https://script.google.com/macros/s/AKfycbyvN2VzDuSs64Px90Kbv6CLvzaTAZIaMkbS9jr-YL7OgoVffjtXhk19ykUW5OBU_P5G/exec" target="_blank">
+                Haz clic aquí
+            </a>
         </div>
     </div>
-    
-    <!-- BOTÓN DE CIERRE DE SESIÓN FLOTANTE -->
-    <button id="logout-btn" onclick="cerrarSesionDefinitiva()">
-        <svg viewBox="0 0 24 24">
-            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h8v-2H4V5z"/>
-        </svg>
-        Cerrar Sesión
-    </button>
-    
-    <div id="error-message">
-        <h3>🔌 Error de conexión</h3>
-        <p>No se pudo establecer comunicación con el servidor. Verifica tu conexión o intenta de nuevo.</p>
-        <button onclick="recargar()">REINTENTAR</button>
-    </div>
-    
-    <!-- IFRAME CON EL PROXY -->
-    <iframe 
-        id="oikos-frame" 
-        src="https://script.google.com/macros/s/AKfycby46lqCa0gYTd2qCouLBPwdu84dg9a91HPPmVe6g6VX-LbsuI7kHcZFWCUu-p6hC_1D/exec" 
-        onload="cargado()"
-        onerror="errorCarga()"
-        allow="geolocation; microphone; camera; fullscreen"
-    ></iframe>
 
     <script>
-        // Mensajes dinámicos para el loading
-        const statusMessages = [
-            "Inicializando módulos...",
-            "Conectando con IRIS...",
+        // Mensajes dinámicos
+        const messages = [
+            "Inicializando IRIS...",
+            "Conectando con servidores...",
             "Cargando inteligencia artificial...",
-            "Preparando reportes...",
-            "Sincronizando datos...",
+            "Preparando interfaz...",
             "Casi listo..."
         ];
         
-        let messageIndex = 0;
-        let statusInterval;
+        let index = 0;
+        const statusEl = document.getElementById('loading-status');
         
-        function updateStatus() {
-            const statusEl = document.getElementById('loading-status');
-            if (statusEl) {
-                statusEl.textContent = statusMessages[messageIndex];
-                messageIndex = (messageIndex + 1) % statusMessages.length;
-            }
-        }
+        setInterval(() => {
+            statusEl.textContent = messages[index];
+            index = (index + 1) % messages.length;
+        }, 600);
         
-        // Iniciar cambios de mensaje
-        statusInterval = setInterval(updateStatus, 800);
-        
-        function cargado() {
-            clearInterval(statusInterval);
-            document.getElementById('loading').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('loading').style.display = 'none';
-            }, 500);
-        }
-        
-        function errorCarga() {
-            clearInterval(statusInterval);
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('error-message').style.display = 'block';
-        }
-        
-        function recargar() {
-            document.getElementById('error-message').style.display = 'none';
-            document.getElementById('loading').style.display = 'flex';
-            document.getElementById('loading').style.opacity = '1';
-            
-            // Reiniciar mensajes
-            messageIndex = 0;
-            clearInterval(statusInterval);
-            statusInterval = setInterval(updateStatus, 800);
-            
-            const iframe = document.getElementById('oikos-frame');
-            iframe.src = iframe.src; // Recarga el iframe
-        }
-        
-        // FUNCIÓN DE CIERRE DE SESIÓN - AHORA SÍ FUNCIONA
-        function cerrarSesionDefinitiva() {
-            if (!confirm('¿Estás seguro de que quieres cerrar la sesión?')) return;
-            
-            // Mostrar loading
-            document.getElementById('loading').style.display = 'flex';
-            document.getElementById('loading').style.opacity = '1';
-            
-            // 1. PRIMERO: Matar la sesión del iframe cargando una URL de logout
-            const iframe = document.getElementById('oikos-frame');
-            
-            // Intentar diferentes URLs de logout
-            const logoutUrls = [
-                'https://script.google.com/macros/s/AKfycby46lqCa0gYTd2qCouLBPwdu84dg9a91HPPmVe6g6VX-LbsuI7kHcZFWCUu-p6hC_1D/exec?logout=true',
-                'https://script.google.com/macros/s/AKfycby46lqCa0gYTd2qCouLBPwdu84dg9a91HPPmVe6g6VX-LbsuI7kHcZFWCUu-p6hC_1D/exec?action=logout',
-                'about:blank' // Último recurso: cargar página en blanco
-            ];
-            
-            let logoutIndex = 0;
-            
-            function intentarLogout() {
-                if (logoutIndex < logoutUrls.length) {
-                    iframe.src = logoutUrls[logoutIndex];
-                    logoutIndex++;
-                    setTimeout(intentarLogout, 500);
-                } else {
-                    // 2. LIMPIAR TODO el almacenamiento local
-                    localStorage.clear();
-                    sessionStorage.clear();
-                    
-                    // 3. Limpiar cookies
-                    document.cookie.split(";").forEach(function(c) { 
-                        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
-                    });
-                    
-                    // 4. RECARGAR la página COMPLETAMENTE (sin caché)
-                    setTimeout(() => {
-                        window.location.href = window.location.href + '?t=' + new Date().getTime();
-                    }, 1000);
-                }
-            }
-            
-            intentarLogout();
-        }
-        
-        // Timeout de seguridad: si después de 15 segundos no carga, mostrar error
+        // Redirección manual por si el meta refresh falla
         setTimeout(() => {
-            if (document.getElementById('loading').style.display !== 'none') {
-                errorCarga();
-            }
-        }, 15000);
-        
-        // Escuchar mensajes del iframe
-        window.addEventListener('message', function(event) {
-            if (event.data === 'cerrar-sesion' || event.data === 'logout' || event.data === 'sesion-finalizada') {
-                cerrarSesionDefinitiva();
-            }
-        });
+            window.location.href = 'https://script.google.com/macros/s/AKfycbyvN2VzDuSs64Px90Kbv6CLvzaTAZIaMkbS9jr-YL7OgoVffjtXhk19ykUW5OBU_P5G/exec';
+        }, 3000);
     </script>
 </body>
 </html>
