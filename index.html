@@ -26,7 +26,7 @@
             overflow: hidden;
         }
         
-        /* LOADER */
+        /* LOADER CON IRIS */
         #loader-container {
             position: fixed;
             top: 0;
@@ -37,8 +37,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10000;
-            transition: opacity 0.5s;
+            z-index: 1000;
+            transition: opacity 0.5s ease;
         }
         
         .loader-content {
@@ -47,8 +47,8 @@
             padding: 20px;
         }
         
-        /* IRIS BOT */
-        .bot-container {
+        /* IRIS BOT ANIMADO */
+        .avatar-bot-container {
             width: 200px;
             height: 200px;
             margin: 0 auto 30px;
@@ -57,7 +57,7 @@
         }
         
         @keyframes float {
-            0%, 100% { transform: translateY(0); }
+            0%, 100% { transform: translateY(0px); }
             50% { transform: translateY(-15px); }
         }
         
@@ -78,7 +78,7 @@
             100% { transform: translate(-50%, -50%) scale(1.3); opacity: 0; }
         }
         
-        .bot {
+        .avatar-bot {
             width: 100%;
             height: 100%;
             position: relative;
@@ -87,7 +87,7 @@
         .bot-body {
             width: 140px;
             height: 150px;
-            background: linear-gradient(145deg, #ffffff, #e8f0fe);
+            background: linear-gradient(145deg, #ffffff 0%, #e8f0fe 50%, #cfe2ff 100%);
             border-radius: 40px 40px 30px 30px;
             position: absolute;
             bottom: 0;
@@ -99,7 +99,7 @@
         .bot-head {
             width: 120px;
             height: 80px;
-            background: linear-gradient(145deg, #1e40af, #1e3a8a);
+            background: linear-gradient(145deg, #1e40af 0%, #1e3a8a 50%, #1e293b 100%);
             border-radius: 30px 30px 20px 20px;
             position: absolute;
             top: 15px;
@@ -111,7 +111,7 @@
         .bot-antenna {
             width: 6px;
             height: 35px;
-            background: linear-gradient(to bottom, #3b82f6, #60a5fa);
+            background: linear-gradient(to bottom, #3b82f6 0%, #60a5fa 50%, transparent 100%);
             position: absolute;
             top: -25px;
             left: 50%;
@@ -122,21 +122,21 @@
             content: '';
             width: 15px;
             height: 15px;
-            background: radial-gradient(circle, #fbbf24, #f59e0b);
+            background: radial-gradient(circle, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
             border-radius: 50%;
             position: absolute;
             top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            animation: pulse 1.5s infinite;
+            animation: antenna-pulse 1.5s ease-in-out infinite;
         }
         
-        @keyframes pulse {
+        @keyframes antenna-pulse {
             0%, 100% { transform: translateX(-50%) scale(1); }
             50% { transform: translateX(-50%) scale(1.3); }
         }
         
-        .bot-eyes {
+        .bot-eyes-container {
             position: absolute;
             top: 25px;
             left: 50%;
@@ -148,9 +148,9 @@
         .bot-eye {
             width: 22px;
             height: 22px;
-            background: radial-gradient(circle at 35% 35%, #22d3ee, #06b6d4);
+            background: radial-gradient(circle at 35% 35%, #22d3ee 0%, #06b6d4 50%, #0891b2 100%);
             border-radius: 50%;
-            animation: blink 3s infinite;
+            animation: blink 3s ease-in-out infinite;
             position: relative;
         }
         
@@ -180,7 +180,7 @@
             border: 3px solid #ff6b9d;
             border-top: none;
             border-radius: 0 0 20px 20px;
-            animation: smile 2s infinite;
+            animation: smile 2s ease-in-out infinite;
         }
         
         @keyframes smile {
@@ -188,11 +188,61 @@
             50% { width: 45px; }
         }
         
+        .bot-chest {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(145deg, #06b6d4 0%, #0891b2 100%);
+            border-radius: 15px;
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 3px solid #22d3ee;
+            animation: chest-pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes chest-pulse {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
+        }
+        
+        .bot-arm {
+            width: 25px;
+            height: 75px;
+            background: linear-gradient(145deg, #3b82f6 0%, #2563eb 100%);
+            border-radius: 15px;
+            position: absolute;
+            top: 80px;
+            border: 3px solid #60a5fa;
+        }
+        
+        .bot-arm.left {
+            left: 5px;
+            transform: rotate(-20deg);
+            animation: wave-left 2s ease-in-out infinite;
+        }
+        
+        .bot-arm.right {
+            right: 5px;
+            transform: rotate(20deg);
+            animation: wave-right 2s ease-in-out infinite;
+        }
+        
+        @keyframes wave-left {
+            0%, 100% { transform: rotate(-20deg); }
+            50% { transform: rotate(-35deg); }
+        }
+        
+        @keyframes wave-right {
+            0%, 100% { transform: rotate(20deg); }
+            50% { transform: rotate(35deg); }
+        }
+        
         .iris-title {
             font-size: 48px;
             font-weight: 900;
             color: white;
-            margin: 20px 0 10px;
+            margin: 20px 0 8px;
         }
         
         .iris-title span {
@@ -200,158 +250,110 @@
             text-shadow: 0 0 20px #3b82f6;
         }
         
-        .status {
+        .loading-status {
+            font-size: 14px;
             color: #94a3b8;
-            font-size: 16px;
+            margin-top: 20px;
         }
         
-        /* IFRAME */
+        /* IFRAME - OCULTO INICIALMENTE */
         #app-frame {
             width: 100%;
             height: 100%;
             border: none;
             display: none;
         }
-        
-        /* BOTÓN DE CIERRE */
-        #logout-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(239, 68, 68, 0.9);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 25px;
-            font-family: 'Inter', sans-serif;
-            font-weight: 700;
-            cursor: pointer;
-            z-index: 20000;
-            display: none;
-            align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        #logout-btn:hover {
-            background: rgba(220, 38, 38, 0.9);
-            transform: translateY(-2px);
-        }
-        
-        #logout-btn svg {
-            width: 18px;
-            height: 18px;
-            fill: white;
-        }
     </style>
 </head>
 <body>
-    <!-- LOADER -->
+    <!-- LOADER CON IRIS -->
     <div id="loader-container">
         <div class="loader-content">
-            <div class="bot-container">
+            <div class="avatar-bot-container">
                 <div class="bot-ring"></div>
-                <div class="bot">
+                <div class="avatar-bot">
                     <div class="bot-body">
                         <div class="bot-head">
                             <div class="bot-antenna"></div>
-                            <div class="bot-eyes">
+                            <div class="bot-eyes-container">
                                 <div class="bot-eye"></div>
                                 <div class="bot-eye"></div>
                             </div>
                             <div class="bot-mouth"></div>
                         </div>
+                        <div class="bot-chest"></div>
+                        <div class="bot-arm left"></div>
+                        <div class="bot-arm right"></div>
                     </div>
                 </div>
             </div>
             <div class="iris-title">✨ <span>IRIS</span> ✨</div>
-            <div class="status" id="status">Cargando sistema...</div>
+            <div class="loading-status" id="loading-status">Inicializando sistema...</div>
         </div>
     </div>
 
-    <!-- IFRAME CON EL PROXY -->
-    <iframe id="app-frame" src="about:blank"></iframe>
-
-    <!-- BOTÓN DE CIERRE -->
-    <button id="logout-btn" onclick="cerrarSesion()">
-        <svg viewBox="0 0 24 24">
-            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h8v-2H4V5z"/>
-        </svg>
-        CERRAR SESIÓN
-    </button>
+    <!-- IFRAME CON EL NUEVO PROXY -->
+    <iframe 
+        id="app-frame" 
+        src="https://script.google.com/macros/s/AKfycby3wjpJ9_30TuT3wraK9WF4p3bXmQgQyefMKKixiXRycbnMZGkagzh49k5czQ8wB4ma/exec"
+        allow="geolocation; microphone; camera; fullscreen"
+    ></iframe>
 
     <script>
         // URLs
-        const PROXY_URL = 'https://script.google.com/macros/s/AKfycby46lqCa0gYTd2qCouLBPwdu84dg9a91HPPmVe6g6VX-LbsuI7kHcZFWCUu-p6hC_1D/exec';
-        const GITHUB_URL = 'https://analistadatos-oikos.github.io/Gestor-de-attendance-IRIS/';
+        const PROXY_URL = 'https://script.google.com/macros/s/AKfycby3wjpJ9_30TuT3wraK9WF4p3bXmQgQyefMKKixiXRycbnMZGkagzh49k5czQ8wB4ma/exec';
         
-        // Mensajes dinámicos
+        // Elementos
+        const loader = document.getElementById('loader-container');
+        const iframe = document.getElementById('app-frame');
+        const statusEl = document.getElementById('loading-status');
+        
+        // Mensajes dinámicos para el loader
         const mensajes = [
             "Inicializando IRIS...",
-            "Conectando con proxy...",
+            "Conectando con el sistema...",
             "Cargando inteligencia artificial...",
             "Preparando entorno...",
+            "Estableciendo comunicación...",
             "Casi listo..."
         ];
         
         let i = 0;
-        const statusEl = document.getElementById('status');
-        const loader = document.getElementById('loader-container');
-        const iframe = document.getElementById('app-frame');
-        const logoutBtn = document.getElementById('logout-btn');
         
-        // Cambiar mensajes
+        // Cambiar mensajes cada 600ms
         setInterval(() => {
             if (loader.style.display !== 'none') {
                 statusEl.textContent = mensajes[i];
                 i = (i + 1) % mensajes.length;
             }
-        }, 800);
+        }, 600);
         
-        // Cargar el proxy en el iframe
-        iframe.src = PROXY_URL;
-        
-        // Cuando cargue el iframe, ocultar loader
+        // Cuando el iframe termine de cargar
         iframe.onload = function() {
             console.log('✅ Proxy cargado correctamente');
             
-            // Mostrar el iframe y ocultar loader
-            iframe.style.display = 'block';
+            // Ocultar loader con fade out
             loader.style.opacity = '0';
             setTimeout(() => {
                 loader.style.display = 'none';
-                logoutBtn.style.display = 'flex';
+                iframe.style.display = 'block';
             }, 500);
         };
         
-        // Si el proxy falla después de 8 segundos, mostrar error
+        // Timeout de seguridad: si después de 10 segundos no carga, mostrar opción manual
         setTimeout(() => {
             if (loader.style.display !== 'none') {
-                statusEl.innerHTML = '⚠️ Error de conexión<br><br>' +
-                    '<a href="' + PROXY_URL + '" target="_blank" style="color: #3b82f6; text-decoration: none;">' +
+                statusEl.innerHTML = '⚠️ Tardando más de lo esperado<br><br>' +
+                    '<a href="' + PROXY_URL + '" target="_blank" style="color: #3b82f6; text-decoration: none; font-weight: bold;">' +
                     'Haz clic aquí para acceder directamente</a>';
             }
-        }, 8000);
+        }, 10000);
         
-        // Cerrar sesión
-        function cerrarSesion() {
-            if (!confirm('¿Cerrar sesión?')) return;
-            
-            // Limpiar todo
+        // Limpiar caché al cargar (opcional)
+        if (window.location.search.includes('clean')) {
             localStorage.clear();
             sessionStorage.clear();
-            
-            // Recargar la página
-            window.location.href = GITHUB_URL + '?clean=' + new Date().getTime();
         }
-        
-        // Escuchar mensajes del iframe
-        window.addEventListener('message', function(event) {
-            if (event.data === 'logout') {
-                cerrarSesion();
-            }
-        });
     </script>
 </body>
 </html>
