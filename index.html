@@ -1,0 +1,13 @@
+<script>
+    // Detectar si viene con token de sesión
+    const urlParams = new URLSearchParams(window.location.search);
+    const sessionToken = urlParams.get('session');
+    
+    let iframeSrc = 'https://script.google.com/macros/s/AKfycbyvN2VzDuSs64Px90Kbv6CLvzaTAZIaMkbS9jr-YL7OgoVffjtXhk19ykUW5OBU_P5G/exec';
+    
+    if (sessionToken) {
+        iframeSrc += '?session=' + sessionToken;
+    }
+    
+    document.getElementById('oikos-frame').src = iframeSrc;
+</script>
