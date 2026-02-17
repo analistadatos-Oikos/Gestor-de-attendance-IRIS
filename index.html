@@ -5,14 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OIKOS - Sistema de Gestión</title>
     
-    <!-- FAVICON DE OIKOS -->
+    <!-- FAVICON -->
     <link rel="icon" type="image/png" href="https://oikos.com.co/wp-content/uploads/2021/01/cropped-Favicon-Oikos-32x32.png">
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- REDIRECCIÓN AUTOMÁTICA -->
-    <meta http-equiv="refresh" content="3;url=https://script.google.com/macros/s/AKfycbyvN2VzDuSs64Px90Kbv6CLvzaTAZIaMkbS9jr-YL7OgoVffjtXhk19ykUW5OBU_P5G/exec">
     
     <style>
         * {
@@ -26,19 +23,31 @@
             height: 100vh;
             background: linear-gradient(135deg, #0a1628 0%, #0f1d36 50%, #1a2744 100%);
             font-family: 'Inter', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             overflow: hidden;
         }
         
-        .container {
+        /* LOADER INICIAL */
+        #loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0a1628 0%, #0f1d36 50%, #1a2744 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.5s;
+        }
+        
+        .loader-content {
             text-align: center;
             max-width: 500px;
             padding: 20px;
         }
         
-        /* IRIS BOT ANIMADO */
+        /* IRIS BOT */
         .avatar-bot-container {
             width: 200px;
             height: 200px;
@@ -84,9 +93,6 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.3),
-                inset 0 -8px 20px rgba(59, 130, 246, 0.2);
             border: 4px solid #3b82f6;
         }
         
@@ -100,10 +106,6 @@
             left: 50%;
             transform: translateX(-50%);
             border: 4px solid #60a5fa;
-            overflow: visible;
-            box-shadow: 
-                0 10px 30px rgba(0, 0, 0, 0.4),
-                inset 0 3px 10px rgba(96, 165, 250, 0.3);
         }
         
         .bot-antenna {
@@ -114,8 +116,6 @@
             top: -25px;
             left: 50%;
             transform: translateX(-50%);
-            border-radius: 3px;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
         }
         
         .bot-antenna::after {
@@ -128,11 +128,10 @@
             top: -12px;
             left: 50%;
             transform: translateX(-50%);
-            box-shadow: 0 0 20px rgba(251, 191, 36, 0.8);
-            animation: antenna-pulse 1.5s ease-in-out infinite;
+            animation: pulse 1.5s infinite;
         }
         
-        @keyframes antenna-pulse {
+        @keyframes pulse {
             0%, 100% { transform: translateX(-50%) scale(1); }
             50% { transform: translateX(-50%) scale(1.3); }
         }
@@ -144,7 +143,6 @@
             transform: translateX(-50%);
             display: flex;
             gap: 25px;
-            z-index: 10;
         }
         
         .bot-eye {
@@ -152,11 +150,7 @@
             height: 22px;
             background: radial-gradient(circle at 35% 35%, #22d3ee 0%, #06b6d4 50%, #0891b2 100%);
             border-radius: 50%;
-            box-shadow: 
-                0 0 25px rgba(34, 211, 238, 0.8),
-                inset 0 -3px 8px rgba(0, 0, 0, 0.3);
-            animation: blink 3s ease-in-out infinite;
-            position: relative;
+            animation: blink 3s infinite;
         }
         
         .bot-eye::after {
@@ -166,14 +160,13 @@
             left: 6px;
             width: 8px;
             height: 8px;
-            background: rgba(255, 255, 255, 0.95);
+            background: white;
             border-radius: 50%;
-            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
         }
         
         @keyframes blink {
-            0%, 90%, 100% { opacity: 1; transform: scaleY(1); }
-            95% { opacity: 0.3; transform: scaleY(0.1); }
+            0%, 90%, 100% { opacity: 1; }
+            95% { opacity: 0.3; }
         }
         
         .bot-mouth {
@@ -181,24 +174,12 @@
             bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
-            width: 45px;
-            height: 20px;
-            z-index: 15;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .bot-mouth::before {
-            content: '';
-            position: absolute;
             width: 40px;
             height: 16px;
             border: 3px solid #ff6b9d;
             border-top: none;
-            border-radius: 0 0 25px 25px;
-            box-shadow: 0 0 20px rgba(255, 107, 157, 0.8);
-            animation: smile 2s ease-in-out infinite;
+            border-radius: 0 0 20px 20px;
+            animation: smile 2s infinite;
         }
         
         @keyframes smile {
@@ -216,24 +197,12 @@
             left: 50%;
             transform: translateX(-50%);
             border: 3px solid #22d3ee;
-            box-shadow: 0 0 30px rgba(6, 182, 212, 0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            animation: chest-pulse 2s ease-in-out infinite;
+            animation: chest-pulse 2s infinite;
         }
         
         @keyframes chest-pulse {
-            0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.8; }
-            50% { transform: translateX(-50%) scale(1.1); opacity: 1; }
-        }
-        
-        .bot-chest::after {
-            content: '';
-            width: 25px;
-            height: 25px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
-            border-radius: 50%;
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.1); }
         }
         
         .bot-arm {
@@ -244,19 +213,18 @@
             position: absolute;
             top: 80px;
             border: 3px solid #60a5fa;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
         }
         
         .bot-arm.left {
             left: 5px;
             transform: rotate(-20deg);
-            animation: wave-left 2s ease-in-out infinite;
+            animation: wave-left 2s infinite;
         }
         
         .bot-arm.right {
             right: 5px;
             transform: rotate(20deg);
-            animation: wave-right 2s ease-in-out infinite;
+            animation: wave-right 2s infinite;
         }
         
         @keyframes wave-left {
@@ -269,154 +237,251 @@
             50% { transform: rotate(35deg); }
         }
         
-        .bot-arm::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 22px;
-            height: 22px;
-            background: linear-gradient(145deg, #60a5fa 0%, #3b82f6 100%);
-            border-radius: 50%;
-            border: 2px solid #60a5fa;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        }
-        
         .iris-title {
             font-size: 42px;
             font-weight: 900;
             color: white;
             margin: 20px 0 8px;
-            letter-spacing: -0.5px;
-            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.5);
         }
         
         .iris-title span {
             color: #3b82f6;
-            text-shadow: 
-                0 0 20px rgba(59, 130, 246, 0.8),
-                0 0 30px rgba(59, 130, 246, 0.5);
-        }
-        
-        .loading-subtitle {
-            font-size: 15px;
-            color: #cbd5e1;
-            margin-bottom: 25px;
-            font-weight: 500;
-        }
-        
-        .progress-bar {
-            width: 300px;
-            height: 6px;
-            background: rgba(59, 130, 246, 0.2);
-            border-radius: 10px;
-            margin: 20px auto;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #3b82f6, #60a5fa, #3b82f6);
-            border-radius: 10px;
-            animation: progress 2s ease-in-out infinite;
-            background-size: 200% 100%;
-        }
-        
-        @keyframes progress {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
+            text-shadow: 0 0 20px #3b82f6;
         }
         
         .loading-status {
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .redirect-message {
+            font-size: 14px;
+            color: #94a3b8;
             margin-top: 20px;
-            font-size: 13px;
-            color: #3b82f6;
-            font-weight: 600;
         }
         
-        .redirect-message a {
-            color: #60a5fa;
-            text-decoration: none;
+        /* IFRAME OCULTO */
+        #app-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: none;
         }
         
-        .redirect-message a:hover {
-            text-decoration: underline;
+        /* BOTÓN DE CIERRE FLOTANTE */
+        #logout-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            z-index: 20000;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+        }
+        
+        #logout-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: #ef4444;
+        }
+        
+        #logout-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #ef4444;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- IRIS BOT ANIMADO -->
-        <div class="avatar-bot-container">
-            <div class="bot-ring"></div>
-            <div class="avatar-bot">
-                <div class="bot-body">
-                    <div class="bot-head">
-                        <div class="bot-antenna"></div>
-                        <div class="bot-eyes-container">
-                            <div class="bot-eye"></div>
-                            <div class="bot-eye"></div>
+    <!-- LOADER CON IRIS -->
+    <div id="loader-container">
+        <div class="loader-content">
+            <div class="avatar-bot-container">
+                <div class="bot-ring"></div>
+                <div class="avatar-bot">
+                    <div class="bot-body">
+                        <div class="bot-head">
+                            <div class="bot-antenna"></div>
+                            <div class="bot-eyes-container">
+                                <div class="bot-eye"></div>
+                                <div class="bot-eye"></div>
+                            </div>
+                            <div class="bot-mouth"></div>
                         </div>
-                        <div class="bot-mouth"></div>
+                        <div class="bot-chest"></div>
+                        <div class="bot-arm left"></div>
+                        <div class="bot-arm right"></div>
                     </div>
-                    <div class="bot-chest"></div>
-                    <div class="bot-arm left"></div>
-                    <div class="bot-arm right"></div>
                 </div>
             </div>
-        </div>
-        
-        <div class="iris-title">✨ <span>IRIS</span> ✨</div>
-        <div class="loading-subtitle">Redirigiendo al Sistema OIKOS...</div>
-        
-        <div class="progress-bar">
-            <div class="progress-fill"></div>
-        </div>
-        
-        <div class="loading-status" id="loading-status">Preparando entorno...</div>
-        
-        <div class="redirect-message">
-            ¿No redirige automáticamente? 
-            <a href="https://script.google.com/macros/s/AKfycbyvN2VzDuSs64Px90Kbv6CLvzaTAZIaMkbS9jr-YL7OgoVffjtXhk19ykUW5OBU_P5G/exec" target="_blank">
-                Haz clic aquí
-            </a>
+            <div class="iris-title">✨ <span>IRIS</span> ✨</div>
+            <div class="loading-status" id="loading-status">Iniciando sistema...</div>
         </div>
     </div>
 
+    <!-- IFRAME PARA LA APP -->
+    <iframe id="app-frame" src="about:blank"></iframe>
+
+    <!-- BOTÓN DE CIERRE DE SESIÓN -->
+    <button id="logout-btn" onclick="cerrarSesionNuclear()">
+        <svg viewBox="0 0 24 24">
+            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h8v-2H4V5z"/>
+        </svg>
+        CERRAR SESIÓN
+    </button>
+
     <script>
+        const APP_URL = 'https://script.google.com/macros/s/AKfycbyvN2VzDuSs64Px90Kbv6CLvzaTAZIaMkbS9jr-YL7OgoVffjtXhk19ykUW5OBU_P5G/exec';
+        const PROXY_URL = 'https://script.google.com/macros/s/AKfycby46lqCa0gYTd2qCouLBPwdu84dg9a91HPPmVe6g6VX-LbsuI7kHcZFWCUu-p6hC_1D/exec';
+        const GITHUB_URL = 'https://analistadatos-oikos.github.io/Gestor-de-attendance-IRIS/';
+        
+        let logoutTimer;
+        
         // Mensajes dinámicos
         const messages = [
             "Inicializando IRIS...",
             "Conectando con servidores...",
             "Cargando inteligencia artificial...",
-            "Preparando interfaz...",
+            "Estableciendo comunicación...",
+            "Preparando entorno...",
             "Casi listo..."
         ];
         
-        let index = 0;
+        let msgIndex = 0;
         const statusEl = document.getElementById('loading-status');
         
+        // Cambiar mensajes cada 600ms
         setInterval(() => {
-            statusEl.textContent = messages[index];
-            index = (index + 1) % messages.length;
+            if (document.getElementById('loader-container').style.display !== 'none') {
+                statusEl.textContent = messages[msgIndex];
+                msgIndex = (msgIndex + 1) % messages.length;
+            }
         }, 600);
         
-        // Redirección manual por si el meta refresh falla
-        setTimeout(() => {
-            window.location.href = 'https://script.google.com/macros/s/AKfycbyvN2VzDuSs64Px90Kbv6CLvzaTAZIaMkbS9jr-YL7OgoVffjtXhk19ykUW5OBU_P5G/exec';
-        }, 3000);
+        // Verificar si venimos de un cierre de sesión
+        function verificarSesionAnterior() {
+            const ultimoCierre = localStorage.getItem('ultimo_cierre');
+            const ahora = new Date().getTime();
+            
+            // Si cerró sesión hace menos de 1 minuto, forzar limpieza
+            if (ultimoCierre && (ahora - parseInt(ultimoCierre)) < 60000) {
+                limpiarTodoNuclear();
+            }
+        }
+        
+        // LIMPIEZA NUCLEAR - ESTO MATA TODO
+        function limpiarTodoNuclear() {
+            console.log('💥 LIMPIEZA NUCLEAR INICIADA');
+            
+            // 1. Limpiar localStorage
+            localStorage.clear();
+            
+            // 2. Limpiar sessionStorage
+            sessionStorage.clear();
+            
+            // 3. Limpiar cookies
+            document.cookie.split(";").forEach(function(c) {
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date(0).toUTCString() + ";path=/");
+            });
+            
+            // 4. Limpiar caché del iframe
+            const iframe = document.getElementById('app-frame');
+            iframe.src = 'about:blank';
+            
+            // 5. Intentar limpiar service workers
+            if ('caches' in window) {
+                caches.keys().then(function(names) {
+                    names.forEach(function(name) {
+                        caches.delete(name);
+                    });
+                });
+            }
+            
+            console.log('✅ TODO LIMPIO');
+        }
+        
+        // CARGAR LA APLICACIÓN
+        function cargarAplicacion() {
+            const iframe = document.getElementById('app-frame');
+            
+            // Usar el proxy primero (intenta ocultar el banner)
+            iframe.src = PROXY_URL;
+            
+            // Mostrar el iframe después de 2 segundos
+            setTimeout(() => {
+                iframe.style.display = 'block';
+                document.getElementById('loader-container').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader-container').style.display = 'none';
+                    document.getElementById('logout-btn').style.display = 'flex';
+                }, 500);
+            }, 2000);
+            
+            // Timeout: si el proxy falla, cargar directo
+            setTimeout(() => {
+                if (iframe.contentDocument && iframe.contentDocument.body && iframe.contentDocument.body.innerHTML.length < 100) {
+                    console.log('Proxy falló, cargando directo');
+                    iframe.src = APP_URL;
+                }
+            }, 5000);
+        }
+        
+        // CIERRE DE SESIÓN NUCLEAR
+        function cerrarSesionNuclear() {
+            if (!confirm('¿Seguro que quieres cerrar sesión? Se borrará TODO el historial.')) return;
+            
+            // Guardar timestamp del cierre
+            localStorage.setItem('ultimo_cierre', new Date().getTime().toString());
+            
+            // Ocultar botón
+            document.getElementById('logout-btn').style.display = 'none';
+            
+            // Mostrar loader
+            document.getElementById('loader-container').style.display = 'flex';
+            document.getElementById('loader-container').style.opacity = '1';
+            document.getElementById('app-frame').style.display = 'none';
+            
+            // Mensaje especial
+            statusEl.textContent = "Limpiando sesión...";
+            
+            // LIMPIEZA NUCLEAR
+            limpiarTodoNuclear();
+            
+            // Redirigir a GitHub Pages (para empezar de nuevo)
+            setTimeout(() => {
+                window.location.href = GITHUB_URL + '?clean=' + new Date().getTime();
+            }, 1500);
+        }
+        
+        // INICIO
+        verificarSesionAnterior();
+        
+        // Si hay parámetro clean, ya estamos limpios
+        if (window.location.search.includes('clean')) {
+            console.log('Inicio limpio detectado');
+        }
+        
+        // Cargar la app
+        cargarAplicacion();
+        
+        // Detectar si el usuario cierra sesión desde dentro del iframe
+        window.addEventListener('message', function(event) {
+            if (event.data === 'logout' || event.data === 'cerrar-sesion') {
+                cerrarSesionNuclear();
+            }
+        });
+        
+        // Prevenir que el usuario vuelva atrás con caché
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                window.location.reload();
+            }
+        });
     </script>
 </body>
 </html>
