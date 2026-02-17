@@ -19,20 +19,6 @@
             font-family: 'Inter', sans-serif;
         }
         
-        .container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-        
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            display: block;
-            background: white;
-        }
-        
         #loading {
             position: fixed;
             top: 0;
@@ -44,8 +30,8 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            transition: opacity 0.5s ease;
             color: white;
+            transition: opacity 0.5s ease;
         }
         
         .loading-content {
@@ -58,10 +44,29 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
         
+        .iris-title {
+            font-size: 48px;
+            font-weight: 900;
+            color: white;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .iris-title span {
+            color: #3b82f6;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
+        }
+        
+        .loading-subtitle {
+            font-size: 14px;
+            color: #94a3b8;
+            margin-bottom: 20px;
+        }
+        
         .loader {
             width: 60px;
             height: 60px;
-            margin: 0 auto 20px;
+            margin: 20px auto 0;
             border: 5px solid rgba(59, 130, 246, 0.2);
             border-top: 5px solid #3b82f6;
             border-radius: 50%;
@@ -73,15 +78,11 @@
             100% { transform: rotate(360deg); }
         }
         
-        .loading-content h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #f1f5f9;
-        }
-        
-        .loading-content p {
-            color: #94a3b8;
-            font-size: 14px;
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
         }
         
         #error-message {
@@ -99,18 +100,6 @@
             z-index: 2000;
             display: none;
             max-width: 400px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
-        }
-        
-        #error-message h3 {
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-        
-        #error-message p {
-            margin-bottom: 20px;
-            font-size: 14px;
-            opacity: 0.9;
         }
         
         #error-message button {
@@ -121,110 +110,65 @@
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
+            margin-top: 15px;
             font-size: 14px;
-            transition: all 0.3s;
         }
         
         #error-message button:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
         }
-        
-        .bot-animation {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 20px;
-            position: relative;
-        }
-        
-        .bot-head {
-            width: 60px;
-            height: 40px;
-            background: #3b82f6;
-            border-radius: 20px 20px 10px 10px;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            animation: nod 2s ease-in-out infinite;
-        }
-        
-        .bot-eye {
-            width: 10px;
-            height: 10px;
-            background: white;
-            border-radius: 50%;
-            position: absolute;
-            top: 10px;
-        }
-        
-        .bot-eye.left { left: 15px; }
-        .bot-eye.right { right: 15px; }
-        
-        @keyframes nod {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
     </style>
 </head>
 <body>
     <div id="loading">
         <div class="loading-content">
-            <div class="bot-animation">
-                <div class="bot-head">
-                    <div class="bot-eye left"></div>
-                    <div class="bot-eye right"></div>
-                </div>
-            </div>
-            <h2>IRIS</h2>
-            <p>Inicializando sistema...</p>
+            <div class="iris-title">✨ <span>IRIS</span> ✨</div>
+            <div class="loading-subtitle">Inicializando sistema OIKOS...</div>
             <div class="loader"></div>
         </div>
     </div>
     
     <div id="error-message">
         <h3>🔌 Error de conexión</h3>
-        <p>No se pudo cargar el sistema. Verifica que el script de Google Apps esté publicado como "Cualquiera" y que la URL sea correcta.</p>
-        <button onclick="recargarIntento()">Reintentar</button>
+        <p>No se pudo cargar el sistema. Verificando proxy...</p>
+        <button onclick="recargar()">Reintentar</button>
     </div>
     
-    <div class="container">
-        <iframe 
-            id="oikos-frame" 
-            src="https://script.google.com/macros/s/AKfycbyvN2VzDuSs64Px90Kbv6CLvzaTAZIaMkbS9jr-YL7OgoVffjtXhk19ykUW5OBU_P5G/exec" 
-            onload="iframeCargado()"
-            onerror="iframeError()"
-            allow="geolocation; microphone; camera; fullscreen"
-        ></iframe>
-    </div>
+    <iframe 
+        id="oikos-frame" 
+        src="https://script.google.com/macros/s/AKfycby46lqCa0gYTd2qCouLBPwdu84dg9a91HPPmVe6g6VX-LbsuI7kHcZFWCUu-p6hC_1D/exec" 
+        onload="cargado()"
+        onerror="errorCarga()"
+        allow="geolocation; microphone; camera; fullscreen"
+    ></iframe>
 
     <script>
-        function iframeCargado() {
-            // Ocultar loading con fade out
+        function cargado() {
             document.getElementById('loading').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('loading').style.display = 'none';
             }, 500);
         }
         
-        function iframeError() {
+        function errorCarga() {
             document.getElementById('loading').style.display = 'none';
             document.getElementById('error-message').style.display = 'block';
         }
         
-        function recargarIntento() {
+        function recargar() {
             document.getElementById('error-message').style.display = 'none';
             document.getElementById('loading').style.display = 'flex';
             document.getElementById('loading').style.opacity = '1';
             
-            // Forzar recarga del iframe
             const iframe = document.getElementById('oikos-frame');
-            iframe.src = iframe.src;
+            iframe.src = iframe.src; // Recarga el iframe
         }
         
         // Timeout de seguridad: si después de 10 segundos no carga, mostrar error
         setTimeout(() => {
             if (document.getElementById('loading').style.display !== 'none') {
-                iframeError();
+                errorCarga();
             }
         }, 10000);
     </script>
