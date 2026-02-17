@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OIKOS - Sistema de Gestión</title>
     
-    <!-- FAVICON (el de OIKOS) -->
+    <!-- FAVICON DE OIKOS -->
     <link rel="icon" type="image/png" href="https://oikos.com.co/wp-content/uploads/2021/01/cropped-Favicon-Oikos-32x32.png">
     <link rel="apple-touch-icon" href="https://oikos.com.co/wp-content/uploads/2021/01/cropped-Favicon-Oikos-180x180.png">
     
@@ -27,7 +27,7 @@
             font-family: 'Inter', sans-serif;
         }
         
-        /* ===== LOADER MEJORADO CON IRIS ===== */
+        /* ===== LOADER CON IRIS ===== */
         #loading {
             position: fixed;
             top: 0;
@@ -49,7 +49,6 @@
             padding: 20px;
         }
         
-        /* Animación del bot IRIS */
         .avatar-bot-container {
             width: 200px;
             height: 200px;
@@ -405,12 +404,48 @@
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
         }
+
+        /* Botón flotante de cierre de sesión */
+        #logout-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 2px solid rgba(239, 68, 68, 0.4);
+            border-radius: 50px;
+            padding: 12px 25px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        #logout-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: #ef4444;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+        }
+
+        #logout-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: #ef4444;
+        }
     </style>
 </head>
 <body>
+    <!-- LOADER CON IRIS -->
     <div id="loading">
         <div class="loading-content">
-            <!-- IRIS BOT ANIMADO -->
             <div class="avatar-bot-container">
                 <div class="bot-ring"></div>
                 <div class="avatar-bot">
@@ -441,12 +476,21 @@
         </div>
     </div>
     
+    <!-- BOTÓN DE CIERRE DE SESIÓN FLOTANTE -->
+    <button id="logout-btn" onclick="cerrarSesionLocal()">
+        <svg viewBox="0 0 24 24">
+            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.11 0-2 .89-2 2v14c0 1.1.89 2 2 2h8v-2H4V5z"/>
+        </svg>
+        Cerrar Sesión
+    </button>
+    
     <div id="error-message">
         <h3>🔌 Error de conexión</h3>
         <p>No se pudo establecer comunicación con el servidor. Verifica tu conexión o intenta de nuevo.</p>
         <button onclick="recargar()">REINTENTAR</button>
     </div>
     
+    <!-- IFRAME CON EL PROXY -->
     <iframe 
         id="oikos-frame" 
         src="https://script.google.com/macros/s/AKfycby46lqCa0gYTd2qCouLBPwdu84dg9a91HPPmVe6g6VX-LbsuI7kHcZFWCUu-p6hC_1D/exec" 
@@ -456,7 +500,7 @@
     ></iframe>
 
     <script>
-        // Array de mensajes para el loading
+        // Mensajes dinámicos para el loading
         const statusMessages = [
             "Inicializando módulos...",
             "Conectando con IRIS...",
@@ -467,6 +511,7 @@
         ];
         
         let messageIndex = 0;
+        let statusInterval;
         
         function updateStatus() {
             const statusEl = document.getElementById('loading-status');
@@ -476,8 +521,8 @@
             }
         }
         
-        // Cambiar mensaje cada 800ms
-        const statusInterval = setInterval(updateStatus, 800);
+        // Iniciar cambios de mensaje
+        statusInterval = setInterval(updateStatus, 800);
         
         function cargado() {
             clearInterval(statusInterval);
@@ -500,10 +545,42 @@
             
             // Reiniciar mensajes
             messageIndex = 0;
-            setInterval(updateStatus, 800);
+            clearInterval(statusInterval);
+            statusInterval = setInterval(updateStatus, 800);
             
             const iframe = document.getElementById('oikos-frame');
             iframe.src = iframe.src; // Recarga el iframe
+        }
+        
+        // FUNCIÓN DE CIERRE DE SESIÓN - SOLO DESDE GITHUB PAGES
+        function cerrarSesionLocal() {
+            if (!confirm('¿Estás seguro de que quieres cerrar la sesión?')) return;
+            
+            // Mostrar loading
+            document.getElementById('loading').style.display = 'flex';
+            document.getElementById('loading').style.opacity = '1';
+            
+            // Limpiar TODO el almacenamiento local
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Limpiar cookies
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            
+            // Opcional: Intentar enviar mensaje al iframe para que también cierre allí
+            try {
+                const iframe = document.getElementById('oikos-frame');
+                iframe.contentWindow.postMessage('cerrar-sesion', '*');
+            } catch(e) {
+                console.log('No se pudo notificar al iframe');
+            }
+            
+            // Recargar la página después de 1 segundo
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
         }
         
         // Timeout de seguridad: si después de 15 segundos no carga, mostrar error
@@ -512,6 +589,13 @@
                 errorCarga();
             }
         }, 15000);
+        
+        // Escuchar mensajes del iframe (por si el script intenta cerrar sesión)
+        window.addEventListener('message', function(event) {
+            if (event.data === 'cerrar-sesion' || event.data === 'logout') {
+                cerrarSesionLocal();
+            }
+        });
     </script>
 </body>
 </html>
